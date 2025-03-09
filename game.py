@@ -31,6 +31,9 @@ class Hero(Character):
     def get_hability(self):
         return self.__hability
 
+    def display_details(self):
+        return f"{super().display_details()}\n Hability: {self.get_hability()}\n"
+
 
 class Enemy(Character):
     def __init__(self, name, health, level, type):
@@ -39,6 +42,9 @@ class Enemy(Character):
 
     def get_type(self):
         return self.__type
+
+    def display_details(self):
+        return f"{super().display_details()}\n Type: {self.get_type()}\n"
 
 
 # Example usage
