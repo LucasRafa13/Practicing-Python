@@ -1,3 +1,5 @@
+import random
+
 # Character: Mother Class
 # Hero: Controlled by the User
 # Enemy: User's opponent
@@ -22,6 +24,18 @@ class Character:
     def display_details(self):
         return f"Name: {self.get_name()}\n Health: {self.get_health()}\n Level: {self.get_level()}\n"
 
+    def receive_attack(self, damage):
+        self.__health -= damage
+        if self.__health <= 0:
+            print(f"{self.get_name()} has died!")
+
+    def attack(self, target):
+        damage = random.randint(self.get_level() * 2, self.get_level() * 4)
+        target.receive_attack(damage)
+        print(
+            f"{self.get_name()} attacked {target.get_name()} and caused {damage} damage!"
+        )
+
 
 class Hero(Character):
     def __init__(self, name, health, level, hability):
@@ -33,6 +47,13 @@ class Hero(Character):
 
     def display_details(self):
         return f"{super().display_details()}\n Hability: {self.get_hability()}\n"
+
+    def special_attack(self, target):
+        damage = random.randint(self.get_level() * 5, self.get_level() * 8)
+        target.receive_attack(damage)
+        print(
+            f"{self.get_name()} used {self.get_hability()} and attacked {target.get_name()} and caused {damage} damage!"
+        )
 
 
 class Enemy(Character):
@@ -47,9 +68,39 @@ class Enemy(Character):
         return f"{super().display_details()}\n Type: {self.get_type()}\n"
 
 
-# Example usage
+class Game:
+    """Class Orchestrator of the game"""
 
-hero = Hero(name="Lucas", health=100, level=15, hability="Super Power")
-enemy = Enemy(name="Bat", health=50, level=3, type="Flying")
-print(hero.display_details())
-print(enemy.display_details())
+    def __init__(self) -> None:
+        self.hero = Hero(name="Lucas", health=100, level=5, hability="Super Power")
+        self.enemy = Enemy(name="Bat", health=80, level=5, type="Flying")
+
+    def start_game(self):
+        print("Starting Game...")
+        while self.hero.get_health() > 0 and self.enemy.get_health() > 0:
+            print("\n Characters Details:")
+            print(self.hero.display_details())
+            print(self.enemy.display_details())
+
+            input("Tap Enter to attack")
+            choice = input("Choose (1 - Normal Attack, 2 - Special Attack):")
+
+            if choice == "1":
+                self.hero.attack(self.enemy)
+            elif choice == "2":
+                self.hero.special_attack(self.enemy)
+            else:
+                print("Invalid choice")
+
+            if self.enemy.get_health() > 0:
+                self.enemy.attack(self.hero)
+
+        if self.hero.get_health() > 0:
+            print("Congratulations, you won!")
+        else:
+            print("Game Over, you lost!")
+
+
+# Game instance and start battle
+game = Game()
+game.start_game()
