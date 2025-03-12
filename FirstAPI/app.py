@@ -19,14 +19,60 @@ def create_task():
     task_id_control += 1
     tasks.append(new_task)
     print(tasks)
-    return jsonify({"message": "Task created successfully"})
+    return jsonify({"message": "Task created successfully", "id": new_task.id})
 
 
 @app.route("/tasks", methods=["GET"])
 def get_tasks():
     tasks_list = [task.to_dict() for task in tasks]
 
-    return jsonify(tasks_list)
+    output = {"tasks": tasks_list, "total_tasks": len(tasks_list)}
+
+    return jsonify(output)
+
+
+@app.route("/tasks/<int:id>", methods=["GET"])
+def get_task(id):
+    for t in tasks:
+        if t.id == id:
+            return jsonify(t.to_dict())
+    return jsonify({"message": "Task not found"}), 404
+
+
+@app.route("/tasks/<int:id>", methods=["PUT"])
+def update_task(id):
+    task = None
+    for t in tasks:
+        if t.id == id:
+            task = t
+            break
+
+    print(task)
+    if task == None:
+        return jsonify({"message": "Task not found"}), 404
+
+    data = request.get_json()
+    task.title = data["title"]
+    task.description = data["description"]
+    task.completed = data["completed"]
+    print(task)
+    return jsonify({"message": "Task updated successfully"})
+
+
+@app.route("/tasks/<int:id>", methods=["DELETE"])
+def delete_task(id):
+    task = None
+    for t in tasks:
+        print(t.to_dict())
+        if t.id == id:
+            task = t
+            break
+
+    if not task:
+        return jsonify({"message": "Task not found"}), 404
+
+    tasks.remove(task)
+    return jsonify({"message": "Task deleted successfully"})
 
 
 if __name__ == "__main__":
