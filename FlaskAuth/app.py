@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from models.user import User
+import bcrypt
 from database import db
 from flask_login import (
     LoginManager,
@@ -12,7 +13,7 @@ from flask_login import (
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "your_secret_key"
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "sqlite:///database.db"  # Replace with your own database URI
+    "mysql+pymysql://root:root@127.0.0.1:3306/flask_crud"  # Replace with your own database URI
 )
 
 
@@ -39,7 +40,7 @@ def login():
     if username and password:
         user = User.query.filter_by(username=username).first()
 
-        if user and user.password == password:
+        if user and bcrypt.checkpw(str.encode(password), str.encode(user.password)):
             login_user(user)
             print(current_user.is_authenticated)
             return jsonify({"message": "Authentication completed "})
@@ -61,7 +62,8 @@ def create_user():
     password = data.get("password")
 
     if username and password:
-        user = User(username=username, password=password)
+        hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+        user = User(username=username, password=hashed_password, role="user")
         db.session.add(user)
         db.session.commit()
         return jsonify({"message": "User created"}), 201
@@ -84,6 +86,10 @@ def read_user(id_user):
 def update_user(id_user):
     data = request.json
     user = User.query.get(id_user)
+
+    if id_user != current_user.id and current_user.role == "user":
+        return jsonify({"message": "You can't update other users"}), 403
+
     if user and data.get("password"):
         user.password = data.get("password")
         db.session.commit()
@@ -92,19 +98,23 @@ def update_user(id_user):
 
     return jsonify({"message": "User not found"}), 404
 
+
 @app.route("/user/<int:id_user>", methods=["DELETE"])
 @login_required
 def delete_user(id_user):
     user = User.query.get(id_user)
 
+    if current_user.role != 'admin':
+        return jsonify({"message": "You don't have permission to delete users"}), 403
+    
     if id_user == current_user.id:
         return jsonify({"message": "You can't delete your own user"}), 403
-    
+
     if user:
         db.session.delete(user)
         db.session.commit()
         return {"message": f"User {id_user} deleted"}
-    
+
     return jsonify({"message": "User not found"}), 404
 
 
