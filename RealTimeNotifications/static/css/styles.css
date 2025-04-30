@@ -31,7 +31,7 @@ main {
   align-items: center;
 }
 
-#qr-code > img {
+#qr-code>img {
   margin-right: 2rem;
   width: 14.5rem;
   height: 14.5rem;
@@ -44,7 +44,7 @@ main {
   max-height: 4.93rem;
 }
 
-main > header {
+main>header {
   display: flex;
 
   padding: 1.5rem;
@@ -65,7 +65,7 @@ main header aside h1 {
   margin-bottom: 0.75rem;
 }
 
-main > header aside p {
+main>header aside p {
   color: #1a1a1a;
   font-size: 1rem;
   line-height: 1.5rem;
@@ -94,7 +94,7 @@ body main footer {
   flex: 1;
 }
 
-#purchase-value > img {
+#purchase-value>img {
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.5rem;
@@ -111,11 +111,11 @@ body main footer {
   align-items: center;
 }
 
-#expiration-time > header {
+#expiration-time>header {
   gap: 0.5rem;
 }
 
-#expiration-time > span::before {
+#expiration-time>span::before {
   content: "";
   display: block;
   width: 1px;
@@ -124,7 +124,7 @@ body main footer {
   margin: 0 2rem;
 }
 
-#expiration-time > span {
+#expiration-time>span {
   color: #575757;
   font-size: 0.75rem;
   flex: 1;
@@ -138,7 +138,7 @@ body main footer {
   font-size: 0.87rem;
 }
 
-#expiration-time > header > div {
+#expiration-time>header>div {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -169,23 +169,23 @@ body main footer {
   flex: 0.5;
 }
 
-#order > small {
+#order>small {
   color: #1a1a1a;
 }
 
-#order > div {
+#order>div {
   gap: 0.5rem;
   display: flex;
   align-items: center;
 }
 
-#order > div span {
+#order>div span {
   color: #4551e6;
   font-size: 1.25rem;
   font-weight: 700;
 }
 
-#order > div img {
+#order>div img {
   width: 1.5rem;
   height: 1.5rem;
 }
@@ -201,12 +201,55 @@ body main footer {
   flex: 1;
 }
 
-#payment-confirmed > p {
+#payment-confirmed>p {
   font-size: 0.87rem;
   color: #575757;
 }
 
-#payment-confirmed > img {
+#payment-confirmed>img {
   height: 2.5rem;
   width: 2.5rem;
+}
+
+#my-orders-button {
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 20px;
+  margin-right: 12px;
+  width: 45% !important;
+  height: 46px !important;
+  background: #4551E6;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+#support-button{
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 20px;
+  gap: 8px;
+  border: 1px solid #C2C2C2;
+  width: 45% !important;
+  height: 46px !important;
+  background: #C2C2C2;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  color: #575757;
+
+}
+
+#div-buttons{
+  display: flex;
+  align-items: flex-start;
 }
